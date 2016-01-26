@@ -1,5 +1,5 @@
 var OPC = new require("./fadecandy/examples/node/opc")
-var client = new OPC("barlights_server_1", 7890);
+var client = new OPC("barlights_server", 7890);
 
 var Gpio = require("onoff").Gpio;
 var hallPin = new Gpio( 4, "in", "both" );
