@@ -4,6 +4,8 @@ app:
    - SYS_RAWIO
   devices:
    - /dev/mem
+  links:
+   - server
   volumes:
    - /sys:/sys
 server:
