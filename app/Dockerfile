@@ -12,6 +12,8 @@ WORKDIR ${projectName}
 RUN git clone https://github.com/${gitUser}/${gitRepo}.git 
 WORKDIR ${gitRepo}/app
 
+RUN git clone git://github.com/scanlime/fadecandy.git
+
 RUN npm install
 
 CMD bash -c "node main.js"
