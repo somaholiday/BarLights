@@ -12,4 +12,4 @@ RUN git clone git://github.com/scanlime/fadecandy.git
 
 RUN npm install
 
-CMD bash -c "node main.js"
+CMD bash -c "node ../main.js"
