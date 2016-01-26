@@ -1,4 +1,4 @@
-FROM node:4.2.6
+FROM hypriot/rpi-node:4.2.4
 
 ENV projectName PROJECT
 ENV gitUser somaholiday
