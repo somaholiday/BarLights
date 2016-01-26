@@ -1,0 +1,8 @@
+app:
+  build: app
+  links:
+   - server
+server:
+  build: server
+  ports:
+   - "7890:7890"
