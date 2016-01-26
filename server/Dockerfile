@@ -15,4 +15,4 @@ RUN git clone git://github.com/${gitUser}/${gitRepo}.git
 
 RUN git clone git://github.com/scanlime/fadecandy.git
 
-CMD bash -c "fadecandy/bin/fcserver-rpi ${gitRepo}/fcserver-config"
+CMD bash -c "fadecandy/bin/fcserver-rpi ${gitRepo}/server/fcserver-config"
