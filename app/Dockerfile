@@ -10,7 +10,7 @@ RUN mkdir ${projectName}
 WORKDIR ${projectName}
 
 RUN git clone https://github.com/${gitUser}/${gitRepo}.git 
-WORKDIR ${gitRepo}
+WORKDIR ${gitRepo}/app
 
 RUN npm install
 
