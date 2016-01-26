@@ -4,7 +4,12 @@ ENV gitUser somaholiday
 ENV gitRepo barlights
 
 RUN apt-get update
-RUN apt-get install git
+RUN apt-get install -y \
+    git \
+    usbutils \
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
 
 RUN git clone git://github.com/${gitUser}/${gitRepo}.git 
 
