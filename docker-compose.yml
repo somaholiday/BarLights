@@ -1,5 +1,9 @@
 app:
   build: app
+  cap_add:
+   - SYS_RAWIO
+  devices:
+   - /dev/mem
   links:
    - server
 server:
