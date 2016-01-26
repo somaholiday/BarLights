@@ -6,6 +6,8 @@ app:
    - /dev/mem
   links:
    - server
+  volumes:
+   - /sys:/sys
 server:
   build: server
   ports:
