@@ -1,16 +1,12 @@
 FROM hypriot/rpi-node:4.2.4
 
-ENV projectName PROJECT
-ENV gitUser somaholiday
-ENV gitRepo barlights
+ENV projectName barlights
 
 RUN apt-get update
 
 RUN mkdir ${projectName}
-WORKDIR ${projectName}
-
-RUN git clone https://github.com/${gitUser}/${gitRepo}.git 
-WORKDIR ${gitRepo}/app
+COPY . ${projectName}
+WORKDIR ${projectName}/app
 
 RUN git clone git://github.com/scanlime/fadecandy.git
 
