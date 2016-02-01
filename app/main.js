@@ -4,7 +4,11 @@ var client = new OPC("server", 7890);
 var Gpio = require("onoff").Gpio;
 var hallPin = new Gpio( 4, "in", "both" );
 
+var PIXEL_COUNT = 31;
+var FADE_TIME = 750; //ms
+
 var isOpen = false;
+var lastChange = 0;
 
 hallPin.watch( function(err, value) {
 	if (err) throw err;
@@ -12,6 +16,8 @@ hallPin.watch( function(err, value) {
 	isOpen = !!value;
 
 	console.log("isOpen : " + isOpen);
+
+  lastChange = new Date().getTime();
 });
 
 function exit() {
@@ -23,18 +29,23 @@ process.on("SIGINT", exit);
 
 function draw() {
 	if (isOpen) {
-		var millis = new Date().getTime();
+    var millis = new Date().getTime();
+    var timeSinceChange = millis - lastChange;
 
-		for ( var pixel = 0; pixel < 64; pixel++ ) {
+    var fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
+
+		for ( var pixel = 0; pixel < PIXEL_COUNT; pixel++ ) {
 			var t = pixel * 0.2 + millis * 0.002;
 			var red =   128 + 96 * Math.sin(t);
 			var green = 128 + 96 * Math.sin(t + 0.1);
 			var blue =  128 + 96 * Math.sin(t + 0.3);
 
-			client.setPixel( pixel, red, green, blue ); 
+			client.setPixel( pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue ); 
 		}
 	} else {
-		for ( var pixel = 0; pixel < 64; pixel++ ) {
+
+
+		for ( var pixel = 0; pixel < PIXEL_COUNT; pixel++ ) {
 			client.setPixel( pixel, 0, 0, 0 );
 		}
 	}
