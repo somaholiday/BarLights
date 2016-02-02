@@ -42,15 +42,32 @@ function draw() {
                 var green = 128 + 96 * Math.sin(t + 0.1);
                 var blue = 128 + 96 * Math.sin(t + 0.3);
 
-                client.setPixel( (strip*64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
+                client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
             }
         }
 
     } else {
+        var millis = new Date().getTime();
+        var timeSinceChange = millis - lastChange;
 
-        for (var strip = 0; strip < STRIP_COUNT; strip++) {
-            for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-                client.setPixel( (strip*64) + pixel, 0, 0, 0);
+        if (timeSinceChange > FADE_TIME) {
+            for (var strip = 0; strip < STRIP_COUNT; strip++) {
+                for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+                    client.setPixel((strip * 64) + pixel, 0, 0, 0);
+                }
+            }
+        } else {
+            var fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
+
+            for (var strip = 0; strip < STRIP_COUNT; strip++) {
+                for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+                    var t = pixel * 0.2 + millis * 0.002;
+                    var red = 128 + 96 * Math.sin(t);
+                    var green = 128 + 96 * Math.sin(t + 0.1);
+                    var blue = 128 + 96 * Math.sin(t + 0.3);
+
+                    client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
+                }
             }
         }
 
