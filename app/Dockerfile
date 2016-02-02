@@ -2,7 +2,7 @@ FROM hypriot/rpi-node:4.2.4
 
 ENV projectName barlights
 
-RUN apt-get update
+# RUN apt-get update
 
 RUN mkdir ${projectName}
 COPY . ${projectName}
