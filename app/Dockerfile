@@ -5,8 +5,8 @@ ENV projectName barlights
 # RUN apt-get update
 
 RUN mkdir ${projectName}
-COPY . ${projectName}
-WORKDIR ${projectName}/app
+ADD . /${projectName}
+WORKDIR /${projectName}/app
 
 RUN git clone git://github.com/scanlime/fadecandy.git
 
