@@ -11,6 +11,16 @@ var FADE_TIME = 750; //ms
 // BEGIN ALGORITHMS //
 //////////////////////
 
+var firstProperty = function(obj) {
+    var keys = Object.keys(obj)
+    return obj[keys[0]];
+};
+
+var randomProperty = function(obj) {
+    var keys = Object.keys(obj)
+    return obj[keys[keys.length * Math.random() << 0]];
+};
+
 var algorithms = {
 
     sineWaveFadeIn: {
@@ -148,16 +158,6 @@ process.stdin.on('keypress', function(ch, key) {
 
 process.stdin.setRawMode(true);
 process.stdin.resume();
-
-var firstProperty = function(obj) {
-    var keys = Object.keys(obj)
-    return obj[keys[0]];
-};
-
-var randomProperty = function(obj) {
-    var keys = Object.keys(obj)
-    return obj[keys[keys.length * Math.random() << 0]];
-};
 
 function draw() {
     if (isOpen) {
