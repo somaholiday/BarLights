@@ -10,12 +10,12 @@ RUN apt-get update -qq && apt-get install -qqy \
     iptables
     
 # Install Docker from Docker Inc. repositories.
-COPY ./rce /usr/bin/rce
-CHMOD u+x /usr/bin/rce
+COPY ./docker /usr/bin/docker
+CHMOD u+x /usr/bin/docker
 
 # Install the magic wrapper.
-ADD ./wraprce /usr/local/bin/wraprce
-RUN chmod +x /usr/local/bin/wraprce
+ADD ./wrapdocker /usr/local/bin/wrapdocker
+RUN chmod +x /usr/local/bin/wrapdocker
 
 RUN curl -L https://github.com/hypriot/compose/releases/download/1.1.0-raspbian/docker-compose-Linux-armv7l > /usr/local/bin/docker-compose
 RUN chmod +x /usr/local/bin/docker-compose
@@ -31,4 +31,4 @@ WORKDIR /docker_root
 
 # Define additional metadata for our image.
 VOLUME /var/lib/rce
-CMD ["wraprce"]
+CMD ["wrapdocker"]
