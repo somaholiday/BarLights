@@ -88,15 +88,15 @@ rm -rf /var/run/rce.pid
 
 if [ "$LOG" == "file" ]
 then
-	rce -d $DOCKER_DAEMON_ARGS &>/var/log/rce.log &
+	docker -d $DOCKER_DAEMON_ARGS &>/var/log/rce.log &
 else
-	rce -d $DOCKER_DAEMON_ARGS &
+	docker -d $DOCKER_DAEMON_ARGS &
 fi
 (( timeout = 60 + SECONDS ))
-until rce info >/dev/null 2>&1
+until docker info >/dev/null 2>&1
 do
 	if (( SECONDS >= timeout )); then
-		echo 'Timed out trying to connect to internal rce host.' >&2
+		echo 'Timed out trying to connect to internal docker host.' >&2
 		break
 	fi
 	sleep 1
