@@ -11,7 +11,7 @@ RUN apt-get update -qq && apt-get install -qqy \
     
 # Install Docker from Docker Inc. repositories.
 COPY ./docker /usr/bin/docker
-CHMOD u+x /usr/bin/docker
+RUN chmod u+x /usr/bin/docker
 
 # Install the magic wrapper.
 ADD ./wrapdocker /usr/local/bin/wrapdocker
