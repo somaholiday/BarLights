@@ -43,9 +43,9 @@ function draw() {
 
                 // client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
 
-                var red = Math.random(255);
-                var green = Math.random(255);
-                var blue = Math.random(255);
+                var red = Math.floor(Math.random() * 255);
+                var green = Math.floor(Math.random() * 255);
+                var blue = Math.floor(Math.random() * 255);
 
                 client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
             }
@@ -74,9 +74,9 @@ function draw() {
 
                     // client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
 
-                    var red = Math.random(255);
-                    var green = Math.random(255);
-                    var blue = Math.random(255);
+                    var red = Math.floor(Math.random() * 255);
+                    var green = Math.floor(Math.random() * 255);
+                    var blue = Math.floor(Math.random() * 255);
 
                     client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
                 }
