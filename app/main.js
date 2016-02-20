@@ -68,9 +68,15 @@ function draw() {
             for (var strip = 0; strip < STRIP_COUNT; strip++) {
                 for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
                     var t = pixel * 0.2 + millis * 0.002;
-                    var red = 128 + 96 * Math.sin(t);
-                    var green = 128 + 96 * Math.sin(t + 0.1);
-                    var blue = 128 + 96 * Math.sin(t + 0.3);
+                    // var red = 128 + 96 * Math.sin(t);
+                    // var green = 128 + 96 * Math.sin(t + 0.1);
+                    // var blue = 128 + 96 * Math.sin(t + 0.3);
+
+                    // client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
+
+                    var red = random(255);
+                    var green = random(255);
+                    var blue = random(255);
 
                     client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
                 }
