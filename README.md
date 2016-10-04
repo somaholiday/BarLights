@@ -1,5 +1,9 @@
 # barlights
 
+This is a project that runs on a Raspberry Pi and uses a Hall effect sensor to turn my friend's dark liquor cabinet into a beautifully lit LED extravaganza, just by opening the cupboard door.
+
+===
+
 Readme files are usually for other people.
 
 Until this project is in a working state that I'm happy with, this readme file is for me.
