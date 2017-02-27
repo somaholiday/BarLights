@@ -1,6 +1,6 @@
 var keypress = require('keypress');
 
-var OPC = new require("../../../fadecandy/examples/node/opc")
+var OPC = new require("./opc")
 var client = new OPC("localhost", 7890);
 
 var STRIP_COUNT = 3;
