@@ -5,7 +5,8 @@
   "main": "main.js",
   "dependencies": {
     "onoff": "^1.0.3",
-    "pi-gpio": "^0.0.8"
+    "pi-gpio": "^0.0.8",
+    "keypress": "latest"
   },
   "devDependencies": {},
   "scripts": {

@@ -1,88 +1,169 @@
-var OPC = new require("../../fadecandy/examples/node/opc")
-var client = new OPC("server", 7890);
+var keypress = require('keypress');
 
-var Gpio = require("onoff").Gpio;
-var hallPin = new Gpio(4, "in", "both");
+var OPC = new require("./opc")
+var client = new OPC("localhost", 7890);
 
 var STRIP_COUNT = 3;
 var PIXEL_COUNT = 31;
 var FADE_TIME = 750; //ms
 
-var isOpen = false;
-var lastChange = 0;
+//////////////////////
+// BEGIN ALGORITHMS //
+//////////////////////
 
-hallPin.watch(function(err, value) {
-    if (err) throw err;
+var firstProperty = function(obj) {
+    var keys = Object.keys(obj)
+    return obj[keys[0]];
+};
 
-    isOpen = !!value;
+var randomProperty = function(obj) {
+    var keys = Object.keys(obj)
+    return obj[keys[keys.length * Math.random() << 0]];
+};
 
-    console.log("isOpen : " + isOpen);
+var algorithms = {
 
-    lastChange = new Date().getTime();
-});
+    sineWaveFadeIn: {
+        name: "sineWaveFadeIn",
 
-function exit() {
-    hallPin.unexport();
-}
+        open: function() {
+            var millis = new Date().getTime();
+            var timeSinceChange = millis - lastChange;
 
-process.on("SIGINT", exit);
-
-function draw() {
-    if (isOpen) {
-
-        var millis = new Date().getTime();
-        var timeSinceChange = millis - lastChange;
-
-        var fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
-        for (var strip = 0; strip < STRIP_COUNT; strip++) {
-            for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-                var t = pixel * 0.2 + millis * 0.002;
-                var red = 128 + 96 * Math.sin(t);
-                var green = 128 + 96 * Math.sin(t + 0.1);
-                var blue = 128 + 96 * Math.sin(t + 0.3);
-
-                client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
-
-                // var red = Math.floor(Math.random() * 255);
-                // var green = Math.floor(Math.random() * 255);
-                // var blue = Math.floor(Math.random() * 255);
-
-                // client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
-            }
-        }
-
-    } else {
-
-        var millis = new Date().getTime();
-        var timeSinceChange = millis - lastChange;
-
-        if (timeSinceChange > FADE_TIME) {
-            for (var strip = 0; strip < STRIP_COUNT; strip++) {
-                for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-                    client.setPixel((strip * 64) + pixel, 0, 0, 0);
-                }
-            }
-        } else {
-            var fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
+            var fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
 
             for (var strip = 0; strip < STRIP_COUNT; strip++) {
                 for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
                     var t = pixel * 0.2 + millis * 0.002;
-                    // var red = 128 + 96 * Math.sin(t);
-                    // var green = 128 + 96 * Math.sin(t + 0.1);
-                    // var blue = 128 + 96 * Math.sin(t + 0.3);
-
-                    // client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
-
-                    var red = Math.floor(Math.random() * 255);
-                    var green = Math.floor(Math.random() * 255);
-                    var blue = Math.floor(Math.random() * 255);
+                    var red = 128 + 96 * Math.sin(t);
+                    var green = 128 + 96 * Math.sin(t + 0.1);
+                    var blue = 128 + 96 * Math.sin(t + 0.3);
 
                     client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
                 }
             }
-        }
+        },
 
+        closed: function() {
+            var millis = new Date().getTime();
+            var timeSinceChange = millis - lastChange;
+
+            var fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
+
+            if (timeSinceChange > FADE_TIME) {
+
+                for (var strip = 0; strip < STRIP_COUNT; strip++) {
+                    for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+                        client.setPixel((strip * 64) + pixel, 0, 0, 0);
+                    }
+                }
+
+            } else {
+
+                for (var strip = 0; strip < STRIP_COUNT; strip++) {
+                    for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+                        var t = pixel * 0.2 + millis * 0.002;
+                        var red = 128 + 96 * Math.sin(t);
+                        var green = 128 + 96 * Math.sin(t + 0.1);
+                        var blue = 128 + 96 * Math.sin(t + 0.3);
+
+                        client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
+                    }
+                }
+            }
+        }
+    },
+
+    somethingElse: {
+        name: "somethingElse",
+
+        open: function() {
+            var millis = new Date().getTime();
+            var timeSinceChange = millis - lastChange;
+
+            var fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
+
+            for (var strip = 0; strip < STRIP_COUNT; strip++) {
+                for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+                    var t = pixel * 0.2 + millis * 0.002;
+                    var red = 128 + 96 * Math.sin(t);
+                    var green = 128 + 96 * Math.sin(t + 0.1);
+                    var blue = 128 + 96 * Math.sin(t + 0.3);
+
+                    client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
+                }
+            }
+        },
+
+        closed: function() {
+            var millis = new Date().getTime();
+            var timeSinceChange = millis - lastChange;
+
+            var fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
+
+            if (timeSinceChange > FADE_TIME) {
+
+                for (var strip = 0; strip < STRIP_COUNT; strip++) {
+                    for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+                        client.setPixel((strip * 64) + pixel, 0, 0, 0);
+                    }
+                }
+
+            } else {
+
+                for (var strip = 0; strip < STRIP_COUNT; strip++) {
+                    for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+                        var t = pixel * 0.2 + millis * 0.002;
+                        var red = 128 + 96 * Math.sin(t);
+                        var green = 128 + 96 * Math.sin(t + 0.1);
+                        var blue = 128 + 96 * Math.sin(t + 0.3);
+
+                        client.setPixel((strip * 64) + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
+                    }
+                }
+            }
+        }
+    }
+};
+
+////////////////////
+// END ALGORITHMS //
+////////////////////
+
+var isOpen = false;
+var lastChange = 0;
+var currentAlgorithm = firstProperty(algorithms);
+
+// make `process.stdin` begin emitting "keypress" events
+keypress(process.stdin);
+
+process.stdin.on('keypress', function(ch, key) {
+    // console.log('got "keypress"', key);
+
+    if (key && key.name == 'space') {
+        isOpen = !isOpen;
+        console.log("isOpen : " + isOpen);
+        lastChange = new Date().getTime();
+    }
+
+    if (key && key.name == 'a') {
+        currentAlgorithm = randomProperty(algorithms);
+        console.log("currentAlgorithm : " + currentAlgorithm.name);
+    }
+
+    if (key && key.ctrl && key.name == 'c') {
+        process.exit();
+    }
+});
+
+process.stdin.setRawMode(true);
+process.stdin.resume();
+
+function draw() {
+    if (isOpen) {
+        currentAlgorithm.open();
+    } else {
+        currentAlgorithm.closed();
     }
     client.writePixels();
 }
