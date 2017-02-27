@@ -1,7 +1,7 @@
 {
   "name": "barlights",
   "version": "0.0.0",
-  "description": "",
+  "description": "Raspberry Pi + Hall effect sensor + LEDs = snazzy liquor cabinet",
   "main": "main.js",
   "dependencies": {
     "onoff": "^1.0.3",
@@ -11,6 +11,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Soma Holiday",
+  "license": "ISC",
+  "repository" :
+    { "type" : "git"
+    , "url" : "https://github.com/somaholiday/barlights.git"
+  }
 }

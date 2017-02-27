@@ -1,4 +1,4 @@
-var OPC = new require("./app/fadecandy/examples/node/opc")
+var OPC = new require("../../fadecandy/examples/node/opc")
 var client = new OPC("server", 7890);
 
 var Gpio = require("onoff").Gpio;
