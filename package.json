@@ -4,18 +4,21 @@
   "description": "Raspberry Pi + Hall effect sensor + LEDs = snazzy liquor cabinet",
   "main": "main.js",
   "dependencies": {
+    "keypress": "latest",
     "onoff": "^1.0.3",
-    "pi-gpio": "^0.0.8",
-    "keypress": "latest"
+    "osc": "^2.2.0",
+    "pi-gpio": "^0.0.8"
   },
   "devDependencies": {},
   "scripts": {
+    "non-pi": "node app/main.js",
+    "start": "sudo ./server/fcserver-rpi & node app/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Soma Holiday",
   "license": "ISC",
-  "repository" :
-    { "type" : "git"
-    , "url" : "https://github.com/somaholiday/barlights.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/somaholiday/barlights.git"
   }
 }
