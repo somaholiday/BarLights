@@ -6,9 +6,12 @@ This is a project that runs on a Raspberry Pi and uses a Hall effect sensor to t
 
 Uses [Fadecandy](https://github.com/scanlime/fadecandy).
 
-To run:
+To run on Raspberry Pi:
 
-- `server/fcserver-rpi`
-- `cd app`
 - `npm install`
-- `node main.js`
+- `npm start`
+
+To run locally for development:
+
+- `npm install`
+- `npm run non-pi`
