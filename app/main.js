@@ -9,7 +9,7 @@ var FADE_TIME = 750; //ms
 
 function handleOSC(message) {
   console.log(message);
-  toggleOpen();
+  toggleOpen(message.args[0]);
 }
 
 const osc = new OSC(handleOSC);
@@ -130,8 +130,13 @@ var algorithms = {
 // END ALGORITHMS //
 ////////////////////
 
-function toggleOpen() {
-  isOpen = !isOpen;
+function toggleOpen(open) {
+  if (typeof open === undefined) {
+    isOpen = !isOpen;
+  } else {
+    isOpen = open;
+  }
+
   console.log('isOpen : ' + isOpen);
   lastChange = new Date().getTime();
 }
