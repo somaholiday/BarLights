@@ -145,28 +145,28 @@ var isOpen = false;
 var lastChange = 0;
 var currentAlgorithm = firstProperty(algorithms);
 
-// make `process.stdin` begin emitting "keypress" events
-keypress(process.stdin);
+// // make `process.stdin` begin emitting "keypress" events
+// keypress(process.stdin);
 
-process.stdin.on('keypress', function(ch, key) {
-  // console.log('got "keypress"', key);
+// process.stdin.on('keypress', function(ch, key) {
+//   // console.log('got "keypress"', key);
 
-  if (key && key.name == 'space') {
-    toggleOpen();
-  }
+//   if (key && key.name == 'space') {
+//     toggleOpen();
+//   }
 
-  if (key && key.name == 'a') {
-    currentAlgorithm = randomProperty(algorithms);
-    console.log('currentAlgorithm : ' + currentAlgorithm.name);
-  }
+//   if (key && key.name == 'a') {
+//     currentAlgorithm = randomProperty(algorithms);
+//     console.log('currentAlgorithm : ' + currentAlgorithm.name);
+//   }
 
-  if (key && key.ctrl && key.name == 'c') {
-    process.exit();
-  }
-});
+//   if (key && key.ctrl && key.name == 'c') {
+//     process.exit();
+//   }
+// });
 
-process.stdin.setRawMode(true);
-process.stdin.resume();
+// process.stdin.setRawMode(true);
+// process.stdin.resume();
 
 function draw() {
   if (isOpen) {
