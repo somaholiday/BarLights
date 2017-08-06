@@ -45,16 +45,16 @@ const algorithms = {
 
       const fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
 
-      for (let strip = 0; strip < STRIP_COUNT; strip++) {
-        for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+      _.each(_.range(STRIP_COUNT), strip => {
+        _.each(_.range(PIXEL_COUNT), pixel => {
           const t = pixel * 0.2 + millis * 0.002;
           const red = 128 + 96 * Math.sin(t);
           const green = 128 + 96 * Math.sin(t + 0.1);
           const blue = 128 + 96 * Math.sin(t + 0.3);
 
           client.setPixel(strip * 64 + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
-        }
-      }
+        });
+      });
     },
 
     closed() {
@@ -64,22 +64,22 @@ const algorithms = {
       const fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
 
       if (timeSinceChange > FADE_TIME) {
-        for (let strip = 0; strip < STRIP_COUNT; strip++) {
-          for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+        _.each(_.range(STRIP_COUNT), strip => {
+          _.each(_.range(PIXEL_COUNT), pixel => {
             client.setPixel(strip * 64 + pixel, 0, 0, 0);
-          }
-        }
+          });
+        });
       } else {
-        for (let strip = 0; strip < STRIP_COUNT; strip++) {
-          for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+        _.each(_.range(STRIP_COUNT), strip => {
+          _.each(_.range(PIXEL_COUNT), pixel => {
             const t = pixel * 0.2 + millis * 0.002;
             const red = 128 + 96 * Math.sin(t);
             const green = 128 + 96 * Math.sin(t + 0.1);
             const blue = 128 + 96 * Math.sin(t + 0.3);
 
             client.setPixel(strip * 64 + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
-          }
-        }
+          });
+        });
       }
     },
   },
@@ -94,11 +94,11 @@ const algorithms = {
       const fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
       const { r, g, b } = hue;
 
-      for (let strip = 0; strip < STRIP_COUNT; strip++) {
-        for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+      _.each(_.range(STRIP_COUNT), strip => {
+        _.each(_.range(PIXEL_COUNT), pixel => {
           client.setPixel(strip * 64 + pixel, fadeFactor * r, fadeFactor * g, fadeFactor * b);
-        }
-      }
+        });
+      });
     },
 
     closed() {
@@ -108,10 +108,18 @@ const algorithms = {
       const fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
       const { r, g, b } = hue;
 
-      for (let strip = 0; strip < STRIP_COUNT; strip++) {
-        for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-          client.setPixel(strip * 64 + pixel, fadeFactor * r, fadeFactor * g, fadeFactor * b);
-        }
+      if (timeSinceChange > FADE_TIME) {
+        _.each(_.range(STRIP_COUNT), strip => {
+          _.each(_.range(PIXEL_COUNT), pixel => {
+            client.setPixel(strip * 64 + pixel, 0, 0, 0);
+          });
+        });
+      } else {
+        _.each(_.range(STRIP_COUNT), strip => {
+          _.each(_.range(PIXEL_COUNT), pixel => {
+            client.setPixel(strip * 64 + pixel, fadeFactor * r, fadeFactor * g, fadeFactor * b);
+          });
+        });
       }
     },
   },
@@ -144,9 +152,9 @@ let isOpen = false;
 let lastChange = 0;
 let currentAlgorithm = algorithms.sineWaveFadeIn;
 const hue = {
-  r: 0,
-  g: 0,
-  b: 0,
+  r: 1,
+  g: 1,
+  b: 1,
 };
 
 function draw() {
