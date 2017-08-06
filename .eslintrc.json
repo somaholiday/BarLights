@@ -14,15 +14,24 @@
     "sourceType": "module"
   },
   "rules": {
+    "eqeqeq": "error",
     "no-console": "off",
-    "no-const-assign": "warn",
-    "no-this-before-super": "warn",
-    "no-undef": "warn",
-    "no-unreachable": "warn",
-    "no-unused-vars": "warn",
-    "no-var": "warn",
-    "object-shorthand": "warn",
-    "constructor-super": "warn",
-    "valid-typeof": "warn"
+    "no-const-assign": "error",
+    "no-else-return": "error",
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-param-reassign": "error",
+    "no-shadow": "error",
+    "no-this-before-super": "error",
+    "no-undef": "error",
+    "no-unreachable": "error",
+    "no-unused-expressions": "error",
+    "no-unused-vars": "error",
+    "no-var": "error",
+    "object-shorthand": "error",
+    "prefer-const": "error",
+    "constructor-super": "error",
+    "sort-imports": "error",
+    "valid-typeof": "error"
   }
 }

@@ -1,7 +1,7 @@
 const _ = require('lodash');
-const keypress = require('keypress');
+// const keypress = require('keypress');
 const { OSC } = require('./osc');
-const OPC = new require('./opc');
+const OPC = new require('./lib/opc');
 const client = new OPC('localhost', 7890);
 
 const STRIP_COUNT = 3;
@@ -36,22 +36,22 @@ const osc = new OSC(handleOSC);
 // BEGIN ALGORITHMS //
 //////////////////////
 
-let algorithms = {
+const algorithms = {
   sineWaveFadeIn: {
     name: 'sineWaveFadeIn',
 
     open() {
-      let millis = Date.now();
-      let timeSinceChange = millis - lastChange;
+      const millis = Date.now();
+      const timeSinceChange = millis - lastChange;
 
-      let fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
+      const fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
 
       for (let strip = 0; strip < STRIP_COUNT; strip++) {
         for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-          let t = pixel * 0.2 + millis * 0.002;
-          let red = 128 + 96 * Math.sin(t);
-          let green = 128 + 96 * Math.sin(t + 0.1);
-          let blue = 128 + 96 * Math.sin(t + 0.3);
+          const t = pixel * 0.2 + millis * 0.002;
+          const red = 128 + 96 * Math.sin(t);
+          const green = 128 + 96 * Math.sin(t + 0.1);
+          const blue = 128 + 96 * Math.sin(t + 0.3);
 
           client.setPixel(strip * 64 + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
         }
@@ -59,10 +59,10 @@ let algorithms = {
     },
 
     closed() {
-      let millis = Date.now();
-      let timeSinceChange = millis - lastChange;
+      const millis = Date.now();
+      const timeSinceChange = millis - lastChange;
 
-      let fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
+      const fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
 
       if (timeSinceChange > FADE_TIME) {
         for (let strip = 0; strip < STRIP_COUNT; strip++) {
@@ -73,10 +73,10 @@ let algorithms = {
       } else {
         for (let strip = 0; strip < STRIP_COUNT; strip++) {
           for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-            let t = pixel * 0.2 + millis * 0.002;
-            let red = 128 + 96 * Math.sin(t);
-            let green = 128 + 96 * Math.sin(t + 0.1);
-            let blue = 128 + 96 * Math.sin(t + 0.3);
+            const t = pixel * 0.2 + millis * 0.002;
+            const red = 128 + 96 * Math.sin(t);
+            const green = 128 + 96 * Math.sin(t + 0.1);
+            const blue = 128 + 96 * Math.sin(t + 0.3);
 
             client.setPixel(strip * 64 + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
           }
@@ -89,10 +89,10 @@ let algorithms = {
     name: 'solid',
 
     open() {
-      let millis = Date.now();
-      let timeSinceChange = millis - lastChange;
+      const millis = Date.now();
+      const timeSinceChange = millis - lastChange;
 
-      let fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
+      const fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
       const { r, g, b } = hue;
 
       for (let strip = 0; strip < STRIP_COUNT; strip++) {
@@ -103,10 +103,10 @@ let algorithms = {
     },
 
     closed() {
-      let millis = Date.now();
-      let timeSinceChange = millis - lastChange;
+      const millis = Date.now();
+      const timeSinceChange = millis - lastChange;
 
-      let fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
+      const fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
       const { r, g, b } = hue;
 
       for (let strip = 0; strip < STRIP_COUNT; strip++) {
@@ -144,7 +144,7 @@ function updateHue(channel, value) {
 let isOpen = false;
 let lastChange = 0;
 let currentAlgorithm = algorithms.sineWaveFadeIn;
-let hue = {
+const hue = {
   r: 0,
   g: 0,
   b: 0,
