@@ -129,7 +129,7 @@ function toggleOpen(open) {
     isOpen = open;
   }
 
-  console.log('isOpen : ' + isOpen);
+  console.log(`isOpen : ${isOpen}`);
   lastChange = new Date().getTime();
 }
 

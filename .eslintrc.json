@@ -30,6 +30,9 @@
     "no-var": "error",
     "object-shorthand": "error",
     "prefer-const": "error",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "prefer-template": "error",
     "constructor-super": "error",
     "sort-imports": "error",
     "valid-typeof": "error"
