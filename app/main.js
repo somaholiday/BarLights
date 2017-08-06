@@ -41,7 +41,7 @@ let algorithms = {
     name: 'sineWaveFadeIn',
 
     open() {
-      let millis = new Date().getTime();
+      let millis = Date.now();
       let timeSinceChange = millis - lastChange;
 
       let fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
@@ -59,7 +59,7 @@ let algorithms = {
     },
 
     closed() {
-      let millis = new Date().getTime();
+      let millis = Date.now();
       let timeSinceChange = millis - lastChange;
 
       let fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
@@ -89,7 +89,7 @@ let algorithms = {
     name: 'solid',
 
     open() {
-      let millis = new Date().getTime();
+      let millis = Date.now();
       let timeSinceChange = millis - lastChange;
 
       let fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
@@ -103,10 +103,10 @@ let algorithms = {
     },
 
     closed() {
-      let millis = new Date().getTime();
+      let millis = Date.now();
       let timeSinceChange = millis - lastChange;
 
-      let fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
+      let fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
       const { r, g, b } = hue;
 
       for (let strip = 0; strip < STRIP_COUNT; strip++) {
