@@ -5,6 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "keypress": "latest",
+    "lodash": "^4.17.4",
     "onoff": "^1.0.3",
     "osc": "^2.2.0",
     "pi-gpio": "^0.0.8"
