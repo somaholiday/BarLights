@@ -1,5 +1,4 @@
 const _ = require('lodash');
-// const keypress = require('keypress');
 const { OSC } = require('./osc');
 const OPC = new require('./lib/opc');
 const client = new OPC('localhost', 7890);
@@ -130,7 +129,7 @@ function toggleOpen(open) {
   }
 
   console.log(`isOpen : ${isOpen}`);
-  lastChange = new Date().getTime();
+  lastChange = Date.now();
 }
 
 function toggleSolid(solid) {
@@ -149,29 +148,6 @@ const hue = {
   g: 0,
   b: 0,
 };
-
-// // make `process.stdin` begin emitting "keypress" events
-// keypress(process.stdin);
-
-// process.stdin.on('keypress', function(ch, key) {
-//   // console.log('got "keypress"', key);
-
-//   if (key && key.name == 'space') {
-//     toggleOpen();
-//   }
-
-//   if (key && key.name == 'a') {
-//     currentAlgorithm = randomProperty(algorithms);
-//     console.log('currentAlgorithm : ' + currentAlgorithm.name);
-//   }
-
-//   if (key && key.ctrl && key.name == 'c') {
-//     process.exit();
-//   }
-// });
-
-// process.stdin.setRawMode(true);
-// process.stdin.resume();
 
 function draw() {
   if (isOpen) {
