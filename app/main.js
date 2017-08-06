@@ -1,15 +1,33 @@
-var keypress = require('keypress');
-var { OSC } = require('./osc');
-var OPC = new require('./opc');
-var client = new OPC('localhost', 7890);
+const _ = require('lodash');
+const keypress = require('keypress');
+const { OSC } = require('./osc');
+const OPC = new require('./opc');
+const client = new OPC('localhost', 7890);
 
-var STRIP_COUNT = 3;
-var PIXEL_COUNT = 31;
-var FADE_TIME = 750; //ms
+const STRIP_COUNT = 3;
+const PIXEL_COUNT = 31;
+const FADE_TIME = 750; //ms
 
 function handleOSC(message) {
+  const { address, args } = message;
+  const parts = _(address).split('/').compact().value();
+
   console.log(message);
-  toggleOpen(message.args[0]);
+
+  // first part is TouchOSC page number (we don't currently care)
+  switch (parts[0]) {
+    default:
+      switch (parts[1]) {
+        case 'power':
+          toggleOpen(args[0]);
+          break;
+        case 'solid':
+          toggleSolid(args[0]);
+          break;
+        case 'hue':
+          updateHue(parts[2], args[0]);
+      }
+  }
 }
 
 const osc = new OSC(handleOSC);
@@ -18,57 +36,47 @@ const osc = new OSC(handleOSC);
 // BEGIN ALGORITHMS //
 //////////////////////
 
-var firstProperty = function(obj) {
-  var keys = Object.keys(obj);
-  return obj[keys[0]];
-};
-
-var randomProperty = function(obj) {
-  var keys = Object.keys(obj);
-  return obj[keys[(keys.length * Math.random()) << 0]];
-};
-
-var algorithms = {
+let algorithms = {
   sineWaveFadeIn: {
     name: 'sineWaveFadeIn',
 
-    open: function() {
-      var millis = new Date().getTime();
-      var timeSinceChange = millis - lastChange;
+    open() {
+      let millis = new Date().getTime();
+      let timeSinceChange = millis - lastChange;
 
-      var fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
+      let fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
 
-      for (var strip = 0; strip < STRIP_COUNT; strip++) {
-        for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-          var t = pixel * 0.2 + millis * 0.002;
-          var red = 128 + 96 * Math.sin(t);
-          var green = 128 + 96 * Math.sin(t + 0.1);
-          var blue = 128 + 96 * Math.sin(t + 0.3);
+      for (let strip = 0; strip < STRIP_COUNT; strip++) {
+        for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+          let t = pixel * 0.2 + millis * 0.002;
+          let red = 128 + 96 * Math.sin(t);
+          let green = 128 + 96 * Math.sin(t + 0.1);
+          let blue = 128 + 96 * Math.sin(t + 0.3);
 
           client.setPixel(strip * 64 + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
         }
       }
     },
 
-    closed: function() {
-      var millis = new Date().getTime();
-      var timeSinceChange = millis - lastChange;
+    closed() {
+      let millis = new Date().getTime();
+      let timeSinceChange = millis - lastChange;
 
-      var fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
+      let fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
 
       if (timeSinceChange > FADE_TIME) {
-        for (var strip = 0; strip < STRIP_COUNT; strip++) {
-          for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+        for (let strip = 0; strip < STRIP_COUNT; strip++) {
+          for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
             client.setPixel(strip * 64 + pixel, 0, 0, 0);
           }
         }
       } else {
-        for (var strip = 0; strip < STRIP_COUNT; strip++) {
-          for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-            var t = pixel * 0.2 + millis * 0.002;
-            var red = 128 + 96 * Math.sin(t);
-            var green = 128 + 96 * Math.sin(t + 0.1);
-            var blue = 128 + 96 * Math.sin(t + 0.3);
+        for (let strip = 0; strip < STRIP_COUNT; strip++) {
+          for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+            let t = pixel * 0.2 + millis * 0.002;
+            let red = 128 + 96 * Math.sin(t);
+            let green = 128 + 96 * Math.sin(t + 0.1);
+            let blue = 128 + 96 * Math.sin(t + 0.3);
 
             client.setPixel(strip * 64 + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
           }
@@ -77,49 +85,33 @@ var algorithms = {
     },
   },
 
-  somethingElse: {
-    name: 'somethingElse',
+  solid: {
+    name: 'solid',
 
-    open: function() {
-      var millis = new Date().getTime();
-      var timeSinceChange = millis - lastChange;
+    open() {
+      let millis = new Date().getTime();
+      let timeSinceChange = millis - lastChange;
 
-      var fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
+      let fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
+      const { r, g, b } = hue;
 
-      for (var strip = 0; strip < STRIP_COUNT; strip++) {
-        for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-          var t = pixel * 0.2 + millis * 0.002;
-          var red = 128 + 96 * Math.sin(t);
-          var green = 128 + 96 * Math.sin(t + 1.1);
-          var blue = 128 + 96 * Math.sin(t + 0.3);
-
-          client.setPixel(strip * 64 + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
+      for (let strip = 0; strip < STRIP_COUNT; strip++) {
+        for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+          client.setPixel(strip * 64 + pixel, fadeFactor * r, fadeFactor * g, fadeFactor * b);
         }
       }
     },
 
-    closed: function() {
-      var millis = new Date().getTime();
-      var timeSinceChange = millis - lastChange;
+    closed() {
+      let millis = new Date().getTime();
+      let timeSinceChange = millis - lastChange;
 
-      var fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
+      let fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
+      const { r, g, b } = hue;
 
-      if (timeSinceChange > FADE_TIME) {
-        for (var strip = 0; strip < STRIP_COUNT; strip++) {
-          for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-            client.setPixel(strip * 64 + pixel, 0, 0, 0);
-          }
-        }
-      } else {
-        for (var strip = 0; strip < STRIP_COUNT; strip++) {
-          for (var pixel = 0; pixel < PIXEL_COUNT; pixel++) {
-            var t = pixel * 0.2 + millis * 0.002;
-            var red = 128 + 96 * Math.sin(t);
-            var green = 128 + 96 * Math.sin(t + 0.1);
-            var blue = 128 + 96 * Math.sin(t + 0.3);
-
-            client.setPixel(strip * 64 + pixel, fadeFactor * red, fadeFactor * green, fadeFactor * blue);
-          }
+      for (let strip = 0; strip < STRIP_COUNT; strip++) {
+        for (let pixel = 0; pixel < PIXEL_COUNT; pixel++) {
+          client.setPixel(strip * 64 + pixel, fadeFactor * r, fadeFactor * g, fadeFactor * b);
         }
       }
     },
@@ -141,9 +133,22 @@ function toggleOpen(open) {
   lastChange = new Date().getTime();
 }
 
-var isOpen = false;
-var lastChange = 0;
-var currentAlgorithm = firstProperty(algorithms);
+function toggleSolid(solid) {
+  currentAlgorithm = solid ? algorithms.solid : algorithms.sineWaveFadeIn;
+}
+
+function updateHue(channel, value) {
+  hue[channel] = 255 * value;
+}
+
+let isOpen = false;
+let lastChange = 0;
+let currentAlgorithm = algorithms.sineWaveFadeIn;
+let hue = {
+  r: 0,
+  g: 0,
+  b: 0,
+};
 
 // // make `process.stdin` begin emitting "keypress" events
 // keypress(process.stdin);
