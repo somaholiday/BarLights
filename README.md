@@ -4,7 +4,7 @@ This is a project that runs on a Raspberry Pi and uses a Hall effect sensor to t
 
 ---
 
-Uses [Fadecandy](https://github.com/scanlime/fadecandy).
+Uses [Fadecandy](https://github.com/scanlime/fadecandy) and [TouchOSC](https://hexler.net/software/touchosc).
 
 To run on Raspberry Pi:
 
