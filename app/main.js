@@ -108,7 +108,7 @@ const algorithms = {
       const timeSinceChange = millis - lastChange;
 
       const fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
-      const [r, g, b] = _.map(STATE.hue, c => c * 255);
+      const [r, g, b] = _.map(hue, c => c * 255);
 
       _.each(_.range(STRIP_COUNT), strip => {
         _.each(_.range(PIXEL_COUNT), pixel => {
@@ -122,7 +122,7 @@ const algorithms = {
       const timeSinceChange = millis - lastChange;
 
       const fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
-      const [r, g, b] = _.map(STATE.hue, c => c * 255);
+      const [r, g, b] = _.map(hue, c => c * 255);
 
       if (timeSinceChange > FADE_TIME) {
         _.each(_.range(STRIP_COUNT), strip => {
@@ -147,40 +147,37 @@ const algorithms = {
 
 function toggleOpen(open) {
   if (typeof open === undefined) {
-    STATE.isOpen = !STATE.isOpen;
+    isOpen = !isOpen;
   } else {
-    STATE.isOpen = open;
+    isOpen = open;
   }
 
-  console.log(`isOpen : ${STATE.isOpen}`);
+  console.log(`isOpen : ${isOpen}`);
   lastChange = Date.now();
 }
 
 function toggleSolid(solid) {
-  STATE.currentAlgorithm = solid ? algorithms.solid : algorithms.sineWaveFadeIn;
+  currentAlgorithm = solid ? algorithms.solid : algorithms.sineWaveFadeIn;
 }
 
 function updateHue(channel, value) {
-  STATE.hue[channel] = value;
+  hue[channel] = value;
 }
 
-const STATE = {
-  isOpen: false,
-  currentAlgoritm: algorithms.sineWaveFadeIn,
-  hue: {
-    r: 1,
-    g: 1,
-    b: 1,
-  },
+let isOpen = false;
+let lastChange = 0;
+let currentAlgorithm = algorithms.sineWaveFadeIn;
+const hue = {
+  r: 1,
+  g: 1,
+  b: 1,
 };
 
-let lastChange = 0;
-
 function draw() {
-  if (STATE.isOpen) {
-    STATE.currentAlgorithm.open();
+  if (isOpen) {
+    currentAlgorithm.open();
   } else {
-    STATE.currentAlgorithm.closed();
+    currentAlgorithm.closed();
   }
   client.writePixels();
 }
