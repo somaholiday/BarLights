@@ -1,18 +1,18 @@
-var osc = require('osc');
-var os = require('os');
+const osc = require('osc');
+const os = require('os');
 
 /****************
  * OSC Over UDP *
  ****************/
 
-var getIPAddresses = function() {
-  var interfaces = os.networkInterfaces(),
+const getIPAddresses = function() {
+  const interfaces = os.networkInterfaces(),
     ipAddresses = [];
 
-  for (var deviceName in interfaces) {
-    var addresses = interfaces[deviceName];
-    for (var i = 0; i < addresses.length; i++) {
-      var addressInfo = addresses[i];
+  for (const deviceName in interfaces) {
+    const addresses = interfaces[deviceName];
+    for (let i = 0; i < addresses.length; i++) {
+      const addressInfo = addresses[i];
       if (addressInfo.family === 'IPv4' && !addressInfo.internal) {
         ipAddresses.push(addressInfo.address);
       }
@@ -24,17 +24,17 @@ var getIPAddresses = function() {
 
 class OSC {
   constructor(messageHandler) {
-    var udpPort = new osc.UDPPort({
+    const udpPort = new osc.UDPPort({
       localAddress: '0.0.0.0',
       localPort: 8081,
     });
 
     udpPort.on('ready', function() {
-      var ipAddresses = getIPAddresses();
+      const ipAddresses = getIPAddresses();
 
       console.log('Listening for OSC over UDP.');
       ipAddresses.forEach(function(address) {
-        console.log(' Host:', address + ', Port:', udpPort.options.localPort);
+        console.log(` Host: ${address}, Port: ${udpPort.options.localPort}`);
       });
     });
 
