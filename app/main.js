@@ -108,7 +108,7 @@ const algorithms = {
       const timeSinceChange = millis - lastChange;
 
       const fadeFactor = Math.min(1, timeSinceChange / FADE_TIME);
-      const { r, g, b } = hue;
+      const [r, g, b] = _.map(hue, c => c * 255);
 
       _.each(_.range(STRIP_COUNT), strip => {
         _.each(_.range(PIXEL_COUNT), pixel => {
@@ -122,7 +122,7 @@ const algorithms = {
       const timeSinceChange = millis - lastChange;
 
       const fadeFactor = 1 - Math.min(1, timeSinceChange / FADE_TIME);
-      const { r, g, b } = hue;
+      const [r, g, b] = _.map(hue, c => c * 255);
 
       if (timeSinceChange > FADE_TIME) {
         _.each(_.range(STRIP_COUNT), strip => {
@@ -161,7 +161,7 @@ function toggleSolid(solid) {
 }
 
 function updateHue(channel, value) {
-  hue[channel] = 255 * value;
+  hue[channel] = value;
 }
 
 let isOpen = false;
