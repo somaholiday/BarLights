@@ -7,11 +7,27 @@ const STRIP_COUNT = 3;
 const PIXEL_COUNT = 31;
 const FADE_TIME = 750; //ms
 
+/**
+ * OSC API
+ *
+ * /1/power
+ *   0 on/off : boolean
+ *
+ * /1/solid
+ *   0 on/off : boolean
+ *
+ * /1/hue/r
+ * /1/hue/g
+ * /1/hue/b
+ *   0 value : number [0-1]
+ *
+ * @param message
+ */
 function handleOSC(message) {
   const { address, args } = message;
   const parts = _(address).split('/').compact().value();
 
-  console.log(message);
+  console.log(`Received OSC message: ${message}`);
 
   // first part is TouchOSC page number (we don't currently care)
   switch (parts[0]) {
