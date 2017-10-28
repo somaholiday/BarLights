@@ -44,10 +44,6 @@ class OSC {
 
     udpPort.on('message', messageHandler);
 
-    udpPort.on('osc', function(packet) {
-      console.log(`OSC EVENT`, packet);
-    });
-
     udpPort.open();
   }
 }
