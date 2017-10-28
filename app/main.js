@@ -27,7 +27,7 @@ function handleOSC(message) {
   const { address, args } = message;
   const parts = _(address).split('/').compact().value();
 
-  console.log(`Received OSC message: ${message}`);
+  console.log(`Received OSC message:`, message);
 
   // first part is TouchOSC page number (we don't currently care)
   switch (parts[0]) {
